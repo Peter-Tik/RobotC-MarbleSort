@@ -1,0 +1,62 @@
+# RobotC-MarbleSort
+Coded in ROBOTC for my Principles of Engineering class
+
+
+#pragma config(Sensor, in1,    FlashRead,      sensorReflection)
+#pragma config(Sensor, dgtl1,  bump1,          sensorTouch)
+#pragma config(Motor,  port2,           WheelMotor,    tmotorVex269_MC29, openLoop)
+#pragma config(Motor,  port3,           SortServo,     tmotorServoStandard, openLoop)
+#pragma config(Motor,  port4,           HangerMotor,   tmotorVex269_MC29, openLoop)
+
+int acrylic = 98;
+int wood = -98;
+int x = 300;
+
+
+
+void up () // Lifts motor that 
+{
+	startMotor(HangerMotor, 20);
+		wait(1.5);
+		stopMotor(HangerMotor);
+		wait(1.5);
+		startMotor(HangerMotor, -20);
+		wait(1.5);
+		stopMotor(HangerMotor);
+		
+}
+
+void SortMarbles()
+{
+	if(SensorValue(FlashRead) > x)
+	{
+		up();
+		setServo(SortServo, wood);
+	}
+	else if (SensorValue(FlashRead) < x)
+	{
+		up();
+		setServo(SortServo, acrylic);
+	}
+}
+
+void run()
+{
+setServo(SortServo, 0);
+	while(1==1)
+		{
+		startMotor(WheelMotor,20);
+		wait(0.39);
+		stopMotor(WheelMotor);
+		wait(3);
+		SortMarbles();
+		}
+
+}
+
+task main()
+{
+waitUntil(SensorValue(bump1)==1);
+
+run();
+}
